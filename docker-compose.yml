@@ -28,7 +28,7 @@ restyaboard:
     - elasticsearch:elasticsearch
     - postgres:postgres
   ports:
-    - 1234:80
+    - 80:80
   volumes_from:
     - data
   restart: always
