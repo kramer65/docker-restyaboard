@@ -15,7 +15,7 @@ RUN echo "postfix postfix/mailname string example.com" | debconf-set-selections 
         && apt-get install -y postfix
 
 # deploy app
-RUN curl -L -o /tmp/restyaboard.zip https://github.com/kramer65/board/archive/${restyaboard_version}.zip \
+RUN curl -L -o /tmp/restyaboard.zip https://github.com/kramer65/board/releases/download/${restyaboard_version}/board-${restyaboard_version}.zip \
         && unzip /tmp/restyaboard.zip -d /usr/share/nginx/html \
         && rm /tmp/restyaboard.zip
 
