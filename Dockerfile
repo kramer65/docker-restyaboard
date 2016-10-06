@@ -5,6 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # restyaboard version
 ENV restyaboard_version=v0.2.1
+ENV restyaboard_repo=RestyaPlatform/board
 
 # update & install package
 RUN apt-get update --yes
@@ -15,9 +16,17 @@ RUN echo "postfix postfix/mailname string example.com" | debconf-set-selections 
         && apt-get install -y postfix
 
 # deploy app
-RUN curl -L -o /tmp/restyaboard.zip https://github.com/RestyaPlatform/board/releases/download/${restyaboard_version}/board-${restyaboard_version}.zip \
-        && unzip /tmp/restyaboard.zip -d /usr/share/nginx/html \
-        && rm /tmp/restyaboard.zip
+#RUN curl -L -o /tmp/restyaboard.zip https://github.com/RestyaPlatform/board/releases/download/${restyaboard_version}/board-${restyaboard_version}.zip \
+#        && unzip /tmp/restyaboard.zip -d /usr/share/nginx/html \
+#        && rm /tmp/restyaboard.zip
+
+# additional packages neaded to build
+RUN apt-get install --yes git nodejs bzip2 && update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && curl https://www.npmjs.com/install.sh | sh
+
+# deploy app from git
+RUN mkdir /usr/share/nginx/html && git clone https://github.com/${restyaboard_repo}.git /usr/share/nginx/html
+RUN cd /usr/share/nginx/html && npm install grunt grunt-template-jasmine-istanbul grunt-contrib-jshint grunt-phplint grunt-contrib-less grunt-contrib-jst grunt-contrib-concat grunt-jsbeautifier grunt-prettify grunt-contrib-cssmin grunt-contrib-uglify grunt-filerev grunt-usemin grunt-contrib-htmlmin grunt-exec grunt-lineending grunt-regex-replace grunt-manifest grunt-zip grunt-contrib-jasmine grunt-plato grunt-complexity grunt-docco grunt-contrib-watch \
+&& npm install -g grunt-cli && grunt build:live
 
 # setting app
 WORKDIR /usr/share/nginx/html
