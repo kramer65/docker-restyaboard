@@ -5,7 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # restyaboard version
 ENV restyaboard_version=v0.2.1
-ENV restyaboard_repo=RestyaPlatform/board
+ENV restyaboard_repo=kramer65/board
 
 # update & install package
 RUN apt-get update --yes
